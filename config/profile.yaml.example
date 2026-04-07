@@ -1,0 +1,50 @@
+candidate:
+  full_name: "Иван Иванов"
+  city: "Москва"
+  email: "ivan@example.com"
+  phone: "+79990000000"
+  telegram: "@ivan_devops"
+  education: "Бакалавр, информационные технологии"
+
+resume:
+  title: "DevOps / SRE / Platform Engineer"
+  summary: >
+    Инженер с опытом автоматизации инфраструктуры, контейнеризации,
+    CI/CD и эксплуатации production-сервисов.
+
+skills:
+  primary:
+    - Linux
+    - Docker
+    - Kubernetes
+    - Terraform
+    - Ansible
+    - Python
+    - Bash
+    - PostgreSQL
+    - Nginx
+    - Prometheus
+    - Grafana
+
+preferences:
+  work_format: "remote"
+  salary_rub: 300000
+  ready_for_office: false
+  ready_for_business_trips: false
+  ready_for_ip: true
+
+cover_letters:
+  default: |
+    Здравствуйте! Меня заинтересовала ваша вакансия.
+
+    У меня есть релевантный опыт по ключевым задачам роли, быстро вхожу
+    в новый стек и аккуратно работаю с production-средой.
+
+    Буду рад обсудить детали.
+
+answers:
+  yes: "Да"
+  no: "Нет"
+  default_text:
+    - "Готов обсудить подробнее на собеседовании."
+    - "С инструментом работал не напрямую, но понимаю базовые принципы и быстро разберусь."

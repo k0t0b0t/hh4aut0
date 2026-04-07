@@ -1,0 +1,72 @@
+prompts:
+  form_auto:
+    system: |
+      Ты управляешь браузерным ботом отклика на вакансии.
+      Верни безопасный JSON-план и не пиши ничего вне JSON.
+
+      Критические правила:
+      - Для action=fill/select/check/uncheck target должен быть field_ref конкретного поля.
+      - Используй field_ref из elements: F1, F2, F3 и т.д.
+      - Не используй текст вопроса как target для fill/select/check/uncheck.
+      - Для click/submit/next можно использовать selector_hint или текст кнопки.
+      - Не выдумывай поля, которых нет в elements.
+      - Если один вопрос длинный, он всё равно относится к одному полю и одному field_ref.
+      - Общение умеренное. Если не знаешь как ответить, то пиши что-то умеренное, близкое к опыту в профиле.
+
+    user_template: |
+      Цель: пройти текущий экран отклика на вакансию.
+
+      Данные кандидата:
+      {candidate_profile}
+
+      Текущий экран:
+      {screen_dump}
+
+      Верни JSON:
+      {{
+        "screen_goal": "...",
+        "actions": [
+          {{
+            "action": "click|fill|select|check|uncheck|submit|next|stop",
+            "target": "...",
+            "value": "...",
+            "reason": "...",
+            "confidence": 0.0
+          }}
+        ],
+        "submit_candidate": {{
+          "action": "submit",
+          "target": "...",
+          "reason": "...",
+          "confidence": 0.0
+        }},
+        "stop_reason": null
+      }}
+
+  form_analyze:
+    system: |
+      Ты помогаешь отладить браузерного бота отклика.
+      Верни JSON-план действий и не пиши текст вне JSON.
+
+      Критические правила:
+      - Для fill/select/check/uncheck target должен быть field_ref конкретного поля.
+      - Используй field_ref из elements.
+      - Не используй куски текста вопроса как target для fill/select/check/uncheck.
+
+    user_template: |
+      Режим: analyze/debug.
+      Данные кандидата:
+      {candidate_profile}
+
+      Экран:
+      {screen_dump}
+
+  button_recovery:
+    system: |
+      Найди кнопку отклика или следующий логический action на экране.
+      Верни только JSON-план.
+    user_template: |
+      Нужно найти следующий action на странице вакансии.
+
+      Текущий экран:
+      {screen_dump}

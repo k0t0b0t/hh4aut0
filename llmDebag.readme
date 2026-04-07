@@ -1,0 +1,36 @@
+=============================================================
+Где посмотреть сырой LLM request/response
+
+Смотри не data/reports/run_*.json, а именно vacancy log:
+
+cat data/logs/vacancies/131294299/run_20260328_211045.json
+
+Чтобы вытащить только LLM-часть:
+
+python - <<'EOF'
+import json
+from pathlib import Path
+
+p = Path("data/logs/vacancies/131294299/run_20260328_211045.json")
+data = json.loads(p.read_text(encoding="utf-8"))
+print(json.dumps(data.get("llm", []), ensure_ascii=False, indent=2))
+EOF
+
+Чтобы отдельно посмотреть raw request/response:
+
+python - <<'EOF'
+import json
+from pathlib import Path
+
+p = Path("data/logs/vacancies/131294299/run_20260328_211045.json")
+data = json.loads(p.read_text(encoding="utf-8"))
+
+for i, item in enumerate(data.get("llm", []), 1):
+    print(f"\n=== LLM stage {i} request ===")
+    print(json.dumps(item.get("debug", {}).get("request", {}), ensure_ascii=False, indent=2))
+    print(f"\n=== LLM stage {i} response ===")
+    print(json.dumps(item.get("debug", {}).get("response", {}), ensure_ascii=False, indent=2))
+EOF
+=========================
+
+

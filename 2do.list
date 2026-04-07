@@ -1,0 +1,48 @@
+ next2do
+1) классификация форм экранов. Вызов ллм бля выбора сценария отработки.
+2) Для видеокарт побольше - парсинг описания вакансии в бд, затем вызов ллм составить сопроводительное.
+================================================
+qwen3:14b- 16384ctx - 40k ctx = 14-16gb vram
+qwen3:8b - 16384ctx - 40k ctx = 10-12gb vram?
+qwen3:4b - max256к ctx? = ??GB vram?
+qwen3:4b - 131072ctx =13-14gb vraw??
+qwen3:4b-16384ctx = 4897MiB vram = оптимально для 1060 на 1060 
+qwen3:4b-4096ctx = 3135MiB (нормально справится с 85+% диалогов и анкет)
+Q4 - все выше- квантование 4.
+===============
+FROM qwen3:4b
+PARAMETER num_ctx 4096 
+EOF
+
+ollama create qwen3:4b-4096ctx -f Modelfile
+=============================================
+
+3) удобный сбор отчета по собесам и контактам.
+4) опросы на внешних ресурсах (гугл яндекс диск).
+
+
+==========
+buglist
+
+Dialogs
+2) Иногда не находит последний мессадж (возможно при системных повторах вопроса)
+3) Длинный вопрос для регулировки.
+ bot run-dialogs 5237088204 --debug-submit 
+
+sudoАплайс
+1) Авто добавление в избранное - багфича?
+2) таймаутs ллм в конфиге - работают меняются?
+3) лимит откликов за команду есть?
+
+
+формы опросы
+2) анкета с вариантами ответов.
+https://spb.hh.ru/vacancy/131709563
+https://spb.hh.ru/vacancy/131694582
+
+3)анкеты для тестов
+bot run-one --url 'https://spb.hh.ru/vacancy/131694797?hhtmFrom=vacancy_search_list' --debug-submit
+https://spb.hh.ru/vacancy/131180591 - мелкая
+
+
+bot run-search --urls "bot run-search --url "https://spb.hh.ru/search/vacancy?resume=fda29fd6ff0f49fa720039ed1f766839307061&from=resumelist&search_field=name&search_field=company_name&search_field=description&enable_snippets=true&salary=200000&work_format=REMOTE&page=1"

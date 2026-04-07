@@ -1,0 +1,58 @@
+system:
+  app_name: hh-bot-v2
+  timezone: Europe/Moscow
+
+browser:
+  cdp_url: "http://127.0.0.1:9222"
+  goto_timeout_ms: 60000
+  action_timeout_ms: 7000
+  wait_after_click_ms: 1800
+  wait_after_fill_ms: 300
+  headless: false
+
+search:
+  max_pages_per_url: 10
+  page_param_name: page
+  stop_on_pagination_error: true
+
+apply:
+  detect_already_applied: true
+  allow_safe_cover_autofill: true
+  safe_cover_requires_single_field: true
+  llm_only_default: false
+  max_llm_attempts_per_stage: 1
+  dry_run_skip_submit: true
+
+debug:
+  save_html_snapshot: true
+  save_screenshot: true
+  save_form_json: true
+  save_llm_payloads_only_in_debug: true
+  write_error_bucket_files: true
+
+storage:
+  db_path: "./data/db/hhbot.sqlite3"
+  logs_dir: "./data/logs"
+  reports_dir: "./data/reports"
+  screenshots_dir: "./data/logs/screenshots"
+  html_dir: "./data/logs/html"
+
+llm:
+  enabled: false
+  transport: openai_compatible
+  base_url: "http://127.0.0.1:11434/v1/chat/completions"
+  model: "qwen2.5:7b-instruct"
+  timeout_sec: 90
+  auth:
+    mode: none
+    api_key: ""
+    username: ""
+    password: ""
+    header_name: Authorization
+    scheme: Bearer
+    extra_headers: {}
+  ssl:
+    verify_ssl: true
+    ca_cert_path: ""
+    client_cert_path: ""
+    client_key_path: ""

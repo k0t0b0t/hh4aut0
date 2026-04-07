@@ -1,0 +1,175 @@
+🚀 Основные команды бота
+======
+#0_c
+!!!!!! Вместо "bot" используй "python3 -m bot.cli.main" или добавляй путь main в path!!!!!!
+#0_c
+======
+
+🧱 Инициализация
+bot init-db
+
+Создаёт или обновляет SQLite базу данных.
+
+👉 Используется перед первым запуском.
+
+🔍 Просмотр состояния
+bot status
+
+Показывает:
+
+общее количество вакансий
+разбивку по статусам (applied, failed и т.д.)
+bot list --limit N
+
+Выводит последние N вакансий из БД:
+
+url
+статус
+компания, зарплата и т.д.
+🌐 Главный сценарий (основной)
+bot run-search --urls ... --limit N
+
+👉 Главная команда проекта
+
+Что делает:
+
+Открывает search URL
+Собирает вакансии (с пагинацией)
+Добавляет только новые в БД
+Пытается откликнуться на них
+
+📌 Важно:
+
+N — это именно новые вакансии
+старые не считаются
+Флаги:
+--dry-run
+👉 всё делает, но не нажимает submit
+--debug-submit
+👉 спрашивает перед отправкой отклика
+--llm-only
+👉 всё через LLM (без safe-логики)
+--force-debug
+👉 игнорирует прошлые статусы
+--max-pages
+👉 лимит страниц поиска
+🗄 Работа с БД
+bot run-db --mode ...
+
+Отклики по уже сохранённым вакансиям.
+
+Режимы:
+--mode new
+👉 только новые
+--mode retry-errors
+👉 ошибки (llm_failed, submit_failed и т.д.)
+--mode not-applied
+👉 всё, где нет applied
+
+--mode statuses --statuses ...
+👉 вручную по статусам
+пример:
+
+--statuses bad_response,llm_failed
+🎯 Одна вакансия (debug)
+bot run-one --url <vacancy_url>
+
+👉 Прогон одной вакансии
+
+Используется для:
+
+дебага
+теста LLM
+проверки формы
+
+Флаги:
+
+--dry-run
+--debug-submit
+--llm-only
+--force-debug
+🧪 Debug формы
+bot dump-form --url <vacancy_url>
+
+Что делает:
+
+открывает вакансию
+нажимает "Откликнуться"
+сохраняет:
+HTML
+скриншот
+JSON формы
+
+👉 Без отправки отклика
+
+🧠 Поддерживаемые действия (LLM / engine)
+
+Из кода action executor:
+
+click — клик по элементу
+fill — заполнить поле
+select — выбрать из списка
+check / uncheck — чекбокс
+next — перейти дальше
+submit — отправить
+stop — остановиться
+
+👉 Это те команды, которые LLM может отдавать движку
+
+⚙️ Как работает в целом
+Сбор вакансий → collector
+Сохранение → db
+Открытие страницы → browser
+Попытка отклика → apply
+Если сложно → LLM
+Логи → data/logs/...
+💡 Коротко (если совсем TL;DR)
+run-search → главный запуск (собрать + откликнуться)
+run-db → повторные попытки
+run-one → дебаг одной вакансии
+dump-form → посмотреть форму
+status / list → посмотреть БД
+init-db → создать БД
+
+
+
+
+
+============
+Как запускать после патчей:
+
+python3 -m bot.cli.main run-dialogs --limit 20 --loops 5 --interval 10 --refresh
+
+По диапазону дат:
+
+python3 -m bot.cli.main run-dialogs --limit 50 --refresh --date-from 2026-04-01 --date-to 2026-04-05
+
+Старые сверху вниз:
+
+python3 -m bot.cli.main run-dialogs --limit 50 --refresh --order oldest
+
+====
+отклики
+
+bot run-search --urls "https://spb.hh.ru/search/vacancy?resume=fda29fd6ff0f49fa720039ed1f766839307061&from=resumelist&search_field=name&search_field=company_name&search_field=description&enable_snippets=true&salary=200000&work_format=REMOTE&page=1" "https://spb.hh.ru/search/vacancy?resume=fda29fd6ff0f49fa720039ed1f766839307061&from=resumelist&search_field=name&search_field=company_name&search_field=description&enable_snippets=true&salary=200000&work_format=REMOTE&page=2" "https://spb.hh.ru/search/vacancy?resume=fda29fd6ff0f49fa720039ed1f766839307061&from=resumelist&search_field=name&search_field=company_name&search_field=description&enable_snippets=true&salary=200000&work_format=REMOTE&page=3" "https://spb.hh.ru/search/vacancy?resume=fda29fd6ff0f49fa720039ed1f766839307061&from=resumelist&search_field=name&search_field=company_name&search_field=description&enable_snippets=true&salary=200000&work_format=REMOTE&page=4" "https://spb.hh.ru/search/vacancy?resume=fda29fd6ff0f49fa720039ed1f766839307061&from=resumelist&search_field=name&search_field=company_name&search_field=description&enable_snippets=true&salary=200000&work_format=REMOTE&page=5" "https://spb.hh.ru/search/vacancy?resume=fda29fd6ff0f49fa720039ed1f766839307061&from=resumelist&search_field=name&search_field=company_name&search_field=description&enable_snippets=true&salary=200000&work_format=REMOTE&page=6" "https://spb.hh.ru/search/vacancy?resume=fda29fd6ff0f49fa720039ed1f766839307061&from=resumelist&search_field=name&search_field=company_name&search_field=description&enable_snippets=true&salary=200000&work_format=REMOTE&page=7" "https://spb.hh.ru/search/vacancy?resume=fda29fd6ff0f49fa720039ed1f766839307061&from=resumelist&search_field=name&search_field=company_name&search_field=description&enable_snippets=true&salary=200000&work_format=REMOTE&page=8" --limit 200
+======
+
+диалоги - открыл https://spb.hh.ru/chat
+дальше сам выбираешь прочитанные или нет.
+
+python3 -m bot.cli.main run-dialogs --limit 20 --loops 5 --interval 10 --refresh
+
+ эта сработала, только лимит почму-то 20 всеравно... нужно лупсами брать значит.
+
+========================
+ollama context
+qwen3:4b-16384ctx = 4897MiB vram = оптимально для 1060 на 6gb. 
+qwen3:4b-4096ctx = 3135MiB (нормально справится с 85+% диалогов и анкет)
+
+
+cat > Modelfile <<'EOF'
+FROM qwen3:4b
+PARAMETER num_ctx 16384
+EOF
+
+ollama create qwen3:4b-16384ctx -f Modelfile
